@@ -16,7 +16,7 @@ public:
 private:
 	struct node 
 	{
-		char symb;
+		unsigned char symb;
 		int weight;
 		node* left;
 		node* right;

@@ -1,6 +1,6 @@
 #include "Huffman.h"
 #include <iostream>
-#include <fstream>
+
 
 int main(int argc, char* argv[])
 {
@@ -11,5 +11,17 @@ int main(int argc, char* argv[])
         huffman->DisplayHelp();
         delete huffman;
         return 0;
+    }
+    string flag = argv[1];
+    if ((argc == 3 || argc == 4) && flag == "-e")
+    {
+        if (argc == 3)
+        {
+            huffman->EncodeFile(argv[2], "");
+        }
+        else
+        {
+            huffman->EncodeFile(argv[2], argv[3]);
+        }
     }
 }
