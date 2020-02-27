@@ -27,7 +27,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	cout << inputFile << " will be encoded to " << outputFile << endl;
 
 	ifstream inputStream;
-	inputStream.open(inputFile);
+	inputStream.open(inputFile, ios::binary);
 	if (inputStream.fail())
 	{
 		cout << "Input stream failed to open" << endl;
