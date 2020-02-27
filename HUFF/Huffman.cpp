@@ -45,7 +45,8 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	int size = 0;
 	while (inputStream.get(character))
 	{ 
-		frequencyTable[character]++;
+		unsigned char realChar = (unsigned char)character;
+		frequencyTable[realChar]++;
 		size++;
 	}
 	cout << "Size: " << size << endl;
