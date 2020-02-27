@@ -16,9 +16,11 @@ public:
 private:
 	struct node 
 	{
-		unsigned char symb;
+		unsigned char symbol;
 		int weight;
 		node* left;
 		node* right;
 	};
+	int frequencyTable[256];
+	node* nodes[256];
 };

@@ -31,10 +31,28 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	if (inputStream.fail())
 	{
 		cout << "Input stream failed to open" << endl;
+		return;
 	}
-	else if (inputStream.is_open())
+	if (inputStream.is_open())
 	{
 		cout << "Input stream is open" << endl;
+	}
+	for (int i = 0; i < 256; i++)
+	{
+		frequencyTable[i] = 0;
+	}
+	char character;
+	while (inputStream.get(character))
+	{ 
+		frequencyTable[character]++;
+	}
+	for (int i = 0; i < 256; i++)
+	{
+		node* newNode = new node();
+		newNode->weight = frequencyTable[i];
+		newNode->symbol = (char)i;
+		newNode->left = newNode->right = nullptr;
+		nodes[i] = newNode;
 	}
 	int fries;
 	cin >> fries;
