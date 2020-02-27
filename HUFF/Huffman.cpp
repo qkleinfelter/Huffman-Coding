@@ -42,10 +42,13 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 		frequencyTable[i] = 0;
 	}
 	char character;
+	int size = 0;
 	while (inputStream.get(character))
 	{ 
 		frequencyTable[character]++;
+		size++;
 	}
+	cout << "Size: " << size << endl;
 	for (int i = 0; i < numChars; i++)
 	{
 		node* newNode = new node();
@@ -77,6 +80,10 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 			nodes[nextSmallestNodeIndex] = parent;
 			cout << nextSmallestNodeIndex << " " << smallestNodeIndex << endl;
 		}
+	}
+	if (nodes[0]->weight != size)
+	{
+		cout << "Nodes[0] weight is " << nodes[0]->weight << ", while size (amt of chars read) is " << size << endl;
 	}
 	int fries;
 	cin >> fries;
