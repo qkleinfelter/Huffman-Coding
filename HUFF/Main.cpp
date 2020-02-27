@@ -24,4 +24,8 @@ int main(int argc, char* argv[])
             huffman->EncodeFile(argv[2], argv[3]);
         }
     }
+    if (argc == 2 && (flag == "-?" || flag == "-h" || flag == "-help"))
+    {
+        huffman->DisplayHelp();
+    }
 }
