@@ -21,6 +21,9 @@ private:
 		node* left;
 		node* right;
 	};
+	const static int numChars = 256;
 	int frequencyTable[256];
 	node* nodes[256];
+
+	int getSmallestNodeIndex(int indexToSkip);
 };
