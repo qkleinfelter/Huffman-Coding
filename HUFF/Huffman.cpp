@@ -22,20 +22,31 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	{
 		int dotLoc = inputFile.find(".");
 		string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
-		outputFile = fileNameWithoutExtension + ".huf";
+		outputFile = fileNameWithoutExtension + ".huf" ;
 	}
 	cout << inputFile << " will be encoded to " << outputFile << endl;
 
 	ifstream inputStream;
+	ofstream outputStream;
 	inputStream.open(inputFile, ios::binary);
+	outputStream.open(outputFile, ios::binary);
 	if (inputStream.fail())
 	{
 		cout << "Input stream failed to open" << endl;
 		return;
 	}
+	if (outputStream.fail())
+	{
+		cout << "Output stream failed to open" << endl;
+		return;
+	}
 	if (inputStream.is_open())
 	{
 		cout << "Input stream is open" << endl;
+	}
+	if (outputStream.is_open())
+	{
+		cout << "Output stream is open" << endl;
 	}
 	for (int i = 0; i < numChars; i++)
 	{
@@ -72,14 +83,18 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 			parent->right = nextSmallestNode;
 			nodes[nextSmallestNodeIndex] = nullptr;
 			nodes[smallestNodeIndex] = parent;
-			cout << smallestNodeIndex << " " << nextSmallestNodeIndex << endl;
+			//cout << smallestNodeIndex << " " << nextSmallestNodeIndex << endl;
+			outputStream << (char)smallestNodeIndex;
+			outputStream << (char)nextSmallestNodeIndex;
 		}
 		else {
 			parent->left = nextSmallestNode;
 			parent->right = smallestNode; 
 			nodes[smallestNodeIndex] = nullptr;
 			nodes[nextSmallestNodeIndex] = parent;
-			cout << nextSmallestNodeIndex << " " << smallestNodeIndex << endl;
+			//cout << nextSmallestNodeIndex << " " << smallestNodeIndex << endl;
+			outputStream << (char)nextSmallestNodeIndex;
+			outputStream << (char)smallestNodeIndex;
 		}
 	}
 	if (nodes[0]->weight != size)

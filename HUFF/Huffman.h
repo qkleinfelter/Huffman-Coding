@@ -24,6 +24,7 @@ private:
 	const static int numChars = 256;
 	int frequencyTable[256];
 	node* nodes[256];
+	string encodingStrings[256];
 
 	int getSmallestNodeIndex(int indexToSkip);
 };
