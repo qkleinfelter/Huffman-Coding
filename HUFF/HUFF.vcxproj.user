@@ -4,4 +4,8 @@
     <LocalDebuggerCommandArguments>-e "C:\Users\Quinn\Desktop\Huffman Testing\Hamlet-Scene-1.txt"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LocalDebuggerCommandArguments>-e "C:\Users\Quinn\Desktop\Huffman Testing\Green Eggs and Ham.txt"</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

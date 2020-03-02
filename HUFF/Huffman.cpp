@@ -131,6 +131,7 @@ void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 	{
 		// We arrived at a leaf
 		encodingStrings[startingPoint->symbol] = currentPath;
+		cout << startingPoint->symbol << ": " << currentPath << endl;
 	}
 	if (startingPoint->left != nullptr)
 	{
