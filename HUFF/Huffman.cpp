@@ -97,6 +97,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 			outputStream.put((char)smallestNodeIndex);
 		}
 	}
+	buildEncodingStrings();
 	if (nodes[0]->weight != size)
 	{
 		cout << "Nodes[0] weight is " << nodes[0]->weight << ", while size (amt of chars read) is " << size << endl;
@@ -120,6 +121,11 @@ int Huffman::getSmallestNodeIndex(int indexToSkip)
 		}
 	}
 	return smallestIndex;
+
+}
+
+void Huffman::buildEncodingStrings()
+{
 
 }
 

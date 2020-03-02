@@ -27,4 +27,5 @@ private:
 	string encodingStrings[256];
 
 	int getSmallestNodeIndex(int indexToSkip);
+	void buildEncodingStrings();
 };
