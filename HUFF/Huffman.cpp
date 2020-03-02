@@ -84,8 +84,8 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 			nodes[nextSmallestNodeIndex] = nullptr;
 			nodes[smallestNodeIndex] = parent;
 			//cout << smallestNodeIndex << " " << nextSmallestNodeIndex << endl;
-			outputStream << (char)smallestNodeIndex;
-			outputStream << (char)nextSmallestNodeIndex;
+			outputStream.put((char)smallestNodeIndex);
+			outputStream.put((char)nextSmallestNodeIndex);
 		}
 		else {
 			parent->left = nextSmallestNode;
@@ -93,8 +93,8 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 			nodes[smallestNodeIndex] = nullptr;
 			nodes[nextSmallestNodeIndex] = parent;
 			//cout << nextSmallestNodeIndex << " " << smallestNodeIndex << endl;
-			outputStream << (char)nextSmallestNodeIndex;
-			outputStream << (char)smallestNodeIndex;
+			outputStream.put((char)nextSmallestNodeIndex);
+			outputStream.put((char)smallestNodeIndex);
 		}
 	}
 	if (nodes[0]->weight != size)
