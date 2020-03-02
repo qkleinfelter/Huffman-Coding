@@ -53,7 +53,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 		frequencyTable[i] = 0;
 	}
 	char character;
-	int size = 0;
+	unsigned int size = 0;
 	while (inputStream.get(character))
 	{ 
 		unsigned char realChar = (unsigned char)character;
@@ -97,7 +97,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 			outputStream.put((char)smallestNodeIndex);
 		}
 	}
-	buildEncodingStrings();
+	buildEncodingStrings(nodes[0], "");
 	if (nodes[0]->weight != size)
 	{
 		cout << "Nodes[0] weight is " << nodes[0]->weight << ", while size (amt of chars read) is " << size << endl;
@@ -124,9 +124,22 @@ int Huffman::getSmallestNodeIndex(int indexToSkip)
 
 }
 
-void Huffman::buildEncodingStrings()
+void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 {
-
+	if (startingPoint == nullptr) return;
+	if (startingPoint->symbol)
+	{
+		// We arrived at a leaf
+		encodingStrings[startingPoint->symbol] = currentPath;
+	}
+	if (startingPoint->left != nullptr)
+	{
+		buildEncodingStrings(startingPoint->left, currentPath += "0");
+	}
+	if (startingPoint->right != nullptr)
+	{
+		buildEncodingStrings(startingPoint->right, currentPath += "1");
+	}
 }
 
 void Huffman::DecodeFile(string inputFile, string outputFile)

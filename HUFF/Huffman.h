@@ -17,7 +17,7 @@ private:
 	struct node 
 	{
 		unsigned char symbol;
-		int weight;
+		unsigned int weight;
 		node* left;
 		node* right;
 	};
@@ -27,5 +27,5 @@ private:
 	string encodingStrings[256];
 
 	int getSmallestNodeIndex(int indexToSkip);
-	void buildEncodingStrings();
+	void buildEncodingStrings(node* startingPoint, string currentPath);
 };
