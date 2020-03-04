@@ -25,7 +25,12 @@ private:
 	int frequencyTable[256];
 	node* nodes[256];
 	string encodingStrings[256];
+	ifstream inputStream;
+	ofstream outputStream;
 
+	void openFiles(string inputFile, string outputFile);
+	void buildFrequencyTable();
 	int getSmallestNodeIndex(int indexToSkip);
+	void buildTree();
 	void buildEncodingStrings(node* startingPoint, string currentPath);
 };
