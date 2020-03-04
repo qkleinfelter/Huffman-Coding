@@ -13,6 +13,12 @@ Huffman::~Huffman()
 
 void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 {
+	if (inputFile == outputFile)
+	{
+		cout << "Input File can not be equal to Output File" << endl;
+		DisplayHelp();
+		return;
+	}
 	if (outputFile == "")
 	{
 		int dotLoc = inputFile.find(".");
@@ -35,6 +41,12 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 
 void Huffman::EncodeFile(string inputFile, string outputFile)
 {
+	if (inputFile == outputFile)
+	{
+		cout << "Input File can not be equal to Output File" << endl;
+		DisplayHelp();
+		return;
+	}
 	if (outputFile == "")
 	{
 		int dotLoc = inputFile.find(".");
@@ -89,7 +101,13 @@ void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 
 void Huffman::DecodeFile(string inputFile, string outputFile)
 {
-
+	if (inputFile == outputFile)
+	{
+		cout << "Input File can not be equal to Output File" << endl;
+		DisplayHelp();
+		return;
+	}
+	openFiles(inputFile, outputFile);
 }
 
 void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outputFile)
