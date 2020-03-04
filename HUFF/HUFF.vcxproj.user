@@ -8,4 +8,8 @@
     <LocalDebuggerCommandArguments>-e "C:\Users\Quinn\Desktop\Huffman Testing\Green Eggs and Ham.txt"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LocalDebuggerCommandArguments>-t "C:\Users\Quinn\Desktop\Huffman Testing\Green Eggs and Ham.txt" "C:\Users\Quinn\Desktop\Huffman Testing\Green.tree"</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

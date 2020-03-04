@@ -1,6 +1,5 @@
 #include "Huffman.h"
 #include <iostream>
-#include <fstream>
 
 Huffman::Huffman()
 {
