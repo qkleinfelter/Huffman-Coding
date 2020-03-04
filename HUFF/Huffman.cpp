@@ -28,6 +28,10 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 		}
 	}
 	cout << "A tree will be created from " << inputFile << " and placed into " << outputFile << endl;
+	openFiles(inputFile, outputFile);
+	buildFrequencyTable();
+	buildTree();
+	closeFiles();
 }
 
 void Huffman::EncodeFile(string inputFile, string outputFile)
@@ -45,7 +49,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	buildEncodingStrings(nodes[0], "");
 	int fries;
 	cin >> fries;
-	inputStream.close();
+	closeFiles();
 }
 
 int Huffman::getSmallestNodeIndex(int indexToSkip)
@@ -177,4 +181,12 @@ void Huffman::buildTree()
 			outputStream.put((char)smallestNodeIndex);
 		}
 	}
+}
+
+void Huffman::closeFiles()
+{
+	if (inputStream.is_open())
+		inputStream.close();
+	if (outputStream.is_open())
+		outputStream.close();
 }

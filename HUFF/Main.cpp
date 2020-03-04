@@ -28,4 +28,15 @@ int main(int argc, char* argv[])
     {
         huffman->DisplayHelp();
     }
+    if ((argc == 3 || argc == 4) && flag == "-t")
+    {
+        if (argc == 3)
+        {
+            huffman->MakeTreeBuilder(argv[2], "");
+        }
+        else
+        {
+            huffman->MakeTreeBuilder(argv[2], argv[3]);
+        }
+    }
 }

@@ -33,4 +33,5 @@ private:
 	int getSmallestNodeIndex(int indexToSkip);
 	void buildTree();
 	void buildEncodingStrings(node* startingPoint, string currentPath);
+	void closeFiles();
 };
