@@ -21,7 +21,7 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 	}
 	if (outputFile == "")
 	{
-		int dotLoc = inputFile.find(".");
+		auto dotLoc = inputFile.find(".");
 		if (dotLoc == string::npos)
 		{
 			outputFile += ".htree";
@@ -49,7 +49,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	}
 	if (outputFile == "")
 	{
-		int dotLoc = inputFile.find(".");
+		auto dotLoc = inputFile.find(".");
 		string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
 		outputFile = fileNameWithoutExtension + ".huf" ;
 	}
@@ -92,11 +92,11 @@ void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 	}
 	if (startingPoint->left != nullptr)
 	{
-		buildEncodingStrings(startingPoint->left, currentPath += "0");
+		buildEncodingStrings(startingPoint->left, currentPath + "0");
 	}
 	if (startingPoint->right != nullptr)
 	{
-		buildEncodingStrings(startingPoint->right, currentPath += "1");
+		buildEncodingStrings(startingPoint->right, currentPath + "1");
 	}
 }
 
@@ -215,17 +215,18 @@ void Huffman::encode()
 	{
 		unsigned char realChar = character;
 		buffer += encodingStrings[realChar];
-		if (buffer.length() > 8)
+		if (buffer.length() >= 8)
 		{
 			// Do some bitwise shit
 			unsigned char byte = 0;
 			for (int i = 0; i <= 7; i++)
 			{
-				byte |= (buffer[i] << (7 - i));
+				bool on = buffer[i] == '1';
+				byte |= (on << (7 - i));
 			}
 			outputStream.put(byte);
 			cout << "output " << byte << " to file" << endl;
-			buffer = buffer.substr(7);
+			buffer = buffer.substr(8);
 		}
 	}
 }
