@@ -35,5 +35,6 @@ private:
 	void buildTree();
 	void buildTreeFromFile();
 	void buildEncodingStrings(node* startingPoint, string currentPath);
+	void decode();
 	void closeFiles();
 };

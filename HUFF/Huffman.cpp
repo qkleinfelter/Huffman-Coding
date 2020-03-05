@@ -65,7 +65,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 
 int Huffman::getSmallestNodeIndex(int indexToSkip)
 {
-	int smallestWeight = INT16_MAX;
+	int smallestWeight = INT32_MAX;
 	int smallestIndex = -1;
 	for (int i = 0; i < numChars; i++)
 	{
@@ -109,6 +109,7 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 	}
 	openFiles(inputFile, outputFile);
 	buildTreeFromFile();
+	decode();
 	int fries;
 	cin >> fries;
 }
@@ -227,6 +228,11 @@ void Huffman::buildTreeFromFile()
 		nodes[char2] = nullptr;
 		nodes[char1] = parent;
 	}
+}
+
+void Huffman::decode()
+{
+	
 }
 
 void Huffman::closeFiles()
