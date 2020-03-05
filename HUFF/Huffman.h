@@ -26,6 +26,7 @@ private:
 	int frequencyTable[256];
 	node* nodes[256];
 	string encodingStrings[256];
+	string paddingBits = "";
 	ifstream inputStream;
 	ofstream outputStream;
 

@@ -88,6 +88,8 @@ void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 	{
 		// We arrived at a leaf
 		encodingStrings[startingPoint->symbol] = currentPath;
+		if (currentPath.length() > 7 && paddingBits.length() != 0)
+			paddingBits = currentPath;
 		//cout << startingPoint->symbol << ": " << currentPath << endl;
 	}
 	if (startingPoint->left != nullptr)
@@ -225,9 +227,21 @@ void Huffman::encode()
 				byte |= (on << (7 - i));
 			}
 			outputStream.put(byte);
-			cout << "output " << byte << " to file" << endl;
+			//cout << "output " << byte << " to file" << endl;
 			buffer = buffer.substr(8);
 		}
+	}
+	if (buffer.length() < 8)
+	{
+		buffer += paddingBits;
+		unsigned char byte = 0;
+		for (int i = 0; i <= 7; i++)
+		{
+			bool on = buffer[i] == '1';
+			byte |= (on << (7 - i));
+		}
+		outputStream.put(byte);
+		cout << "output " << byte << " to file" << endl;
 	}
 }
 
@@ -241,7 +255,7 @@ void Huffman::buildTreeFromFile()
 		newNode->left = newNode->right = nullptr;
 		nodes[i] = newNode;
 	}
-	for (int i = 0; i < (numChars - 1) * 2; i++)
+	for (int i = 0; i < numChars - 1; i++)
 	{
 		char character1, character2;
 		inputStream.get(character1);
