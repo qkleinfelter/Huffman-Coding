@@ -39,4 +39,8 @@ int main(int argc, char* argv[])
             huffman->MakeTreeBuilder(argv[2], argv[3]);
         }
     }
+    if (argc == 4 && flag == "-d")
+    {
+        huffman->DecodeFile(argv[2], argv[3]);
+    }
 }

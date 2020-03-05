@@ -108,6 +108,9 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 		return;
 	}
 	openFiles(inputFile, outputFile);
+	buildTreeFromFile();
+	int fries;
+	cin >> fries;
 }
 
 void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outputFile)
@@ -197,6 +200,32 @@ void Huffman::buildTree()
 			outputStream.put((char)nextSmallestNodeIndex);
 			outputStream.put((char)smallestNodeIndex);
 		}
+	}
+}
+
+void Huffman::buildTreeFromFile()
+{
+	for (int i = 0; i < numChars; i++)
+	{
+		node* newNode = new node();
+		newNode->weight = 0;
+		newNode->symbol = (char)i;
+		newNode->left = newNode->right = nullptr;
+		nodes[i] = newNode;
+	}
+	for (int i = 0; i < (numChars - 1) * 2; i++)
+	{
+		char character1, character2;
+		inputStream.get(character1);
+		inputStream.get(character2);
+		unsigned char char1 = character1;
+		unsigned char char2 = character2;
+		node* parent = new node();
+		parent->weight = 0;
+		parent->left = nodes[char1];
+		parent->right = nodes[char2];
+		nodes[char2] = nullptr;
+		nodes[char1] = parent;
 	}
 }
 

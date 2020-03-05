@@ -33,6 +33,7 @@ private:
 	void buildFrequencyTable();
 	int getSmallestNodeIndex(int indexToSkip);
 	void buildTree();
+	void buildTreeFromFile();
 	void buildEncodingStrings(node* startingPoint, string currentPath);
 	void closeFiles();
 };
