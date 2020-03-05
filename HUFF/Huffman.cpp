@@ -58,6 +58,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	buildFrequencyTable();
 	buildTree();
 	buildEncodingStrings(nodes[0], "");
+	encode();
 	int fries;
 	cin >> fries;
 	closeFiles();
@@ -87,7 +88,7 @@ void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 	{
 		// We arrived at a leaf
 		encodingStrings[startingPoint->symbol] = currentPath;
-		cout << startingPoint->symbol << ": " << currentPath << endl;
+		//cout << startingPoint->symbol << ": " << currentPath << endl;
 	}
 	if (startingPoint->left != nullptr)
 	{
@@ -200,6 +201,31 @@ void Huffman::buildTree()
 			//cout << nextSmallestNodeIndex << " " << smallestNodeIndex << endl;
 			outputStream.put((char)nextSmallestNodeIndex);
 			outputStream.put((char)smallestNodeIndex);
+		}
+	}
+}
+
+void Huffman::encode()
+{
+	inputStream.clear();
+	inputStream.seekg(0);
+	char character;
+	string buffer = "";
+	while (inputStream.get(character))
+	{
+		unsigned char realChar = character;
+		buffer += encodingStrings[realChar];
+		if (buffer.length() > 8)
+		{
+			// Do some bitwise shit
+			unsigned char byte = 0;
+			for (int i = 0; i <= 7; i++)
+			{
+				byte |= (buffer[i] << (7 - i));
+			}
+			outputStream.put(byte);
+			cout << "output " << byte << " to file" << endl;
+			buffer = buffer.substr(7);
 		}
 	}
 }
