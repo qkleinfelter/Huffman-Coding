@@ -171,7 +171,7 @@ void Huffman::buildTree()
 	{
 		node* newNode = new node();
 		newNode->weight = frequencyTable[i];
-		newNode->symbol = (char)i;
+		newNode->symbol = (unsigned char)i;
 		newNode->left = newNode->right = nullptr;
 		nodes[i] = newNode;
 	}
