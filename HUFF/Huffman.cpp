@@ -1,7 +1,7 @@
 #include "Huffman.h"
 #include <iostream>
 
-Huffman::Huffman()
+Huffman::Huffman() : nodes{ nullptr }, frequencyTable { 0 }
 {
 
 }
@@ -66,7 +66,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 
 int Huffman::getSmallestNodeIndex(int indexToSkip)
 {
-	int smallestWeight = INT32_MAX;
+	unsigned int smallestWeight = INT32_MAX;
 	int smallestIndex = -1;
 	for (int i = 0; i < numChars; i++)
 	{
