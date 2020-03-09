@@ -40,6 +40,7 @@ private:
 	void buildEncodingStrings(node* startingPoint, string currentPath);
 	void encode();
 	void decode();
+	void followTree(unsigned char byte, int checkBit, node*& currentNode);
 	void closeFiles();
 	void deleteSubtree(node* startingNode);
 };

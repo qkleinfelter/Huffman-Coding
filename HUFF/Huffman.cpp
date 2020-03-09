@@ -127,8 +127,7 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 	openFiles(inputFile, outputFile);
 	buildTreeFromFile();
 	decode();
-	int fries;
-	cin >> fries;
+	closeFiles();
 }
 
 void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outputFile)
@@ -268,7 +267,7 @@ void Huffman::buildTreeFromFile()
 	{
 		node* newNode = new node();
 		newNode->weight = 0;
-		newNode->symbol = (char)i;
+		newNode->symbol = (unsigned char)i;
 		newNode->left = newNode->right = nullptr;
 		nodes[i] = newNode;
 	}
@@ -282,6 +281,7 @@ void Huffman::buildTreeFromFile()
 		unsigned char char2 = character2;
 		node* parent = new node();
 		parent->weight = 0;
+		parent->symbol = NULL;
 		parent->left = nodes[char1];
 		parent->right = nodes[char2];
 		nodes[char2] = nullptr;
@@ -291,7 +291,33 @@ void Huffman::buildTreeFromFile()
 
 void Huffman::decode()
 {
-	
+	char character;
+	node* currentNode = nodes[0];
+	while (inputStream.get(character))
+	{
+		bytesIn++;
+		unsigned char byte = character;
+		followTree(byte, 128, currentNode);
+		followTree(byte, 64, currentNode);
+		followTree(byte, 32, currentNode);
+		followTree(byte, 16, currentNode);
+		followTree(byte, 8, currentNode);
+		followTree(byte, 4, currentNode);
+		followTree(byte, 2, currentNode);
+		followTree(byte, 1, currentNode);
+	}
+}
+
+void Huffman::followTree(unsigned char byte, int checkBit, node*& currentNode)
+{
+	currentNode = byte & checkBit ? currentNode->right : currentNode->left;
+	if (currentNode->left == nullptr && currentNode->right == nullptr)
+	{
+		outputStream.put(currentNode->symbol);
+		//cout << "printed " << currentNode->symbol << " to file" << endl;
+		bytesOut++;
+		currentNode = nodes[0];
+	}
 }
 
 void Huffman::closeFiles()
