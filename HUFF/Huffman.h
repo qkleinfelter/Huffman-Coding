@@ -41,4 +41,5 @@ private:
 	void encode();
 	void decode();
 	void closeFiles();
+	void deleteSubtree(node* startingNode);
 };

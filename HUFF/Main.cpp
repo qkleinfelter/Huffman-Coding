@@ -43,4 +43,5 @@ int main(int argc, char* argv[])
     {
         huffman->DecodeFile(argv[2], argv[3]);
     }
+    delete huffman;
 }

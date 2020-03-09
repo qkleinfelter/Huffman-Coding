@@ -8,7 +8,24 @@ Huffman::Huffman() : nodes{ nullptr }, frequencyTable { 0 }
 
 Huffman::~Huffman()
 {
+	for (int i = 0; i < numChars; i++)
+	{
+		if (nodes[i] != nullptr)
+			deleteSubtree(nodes[i]);
+	}
+}
 
+void Huffman::deleteSubtree(node* startingNode)
+{
+	if (startingNode->left != nullptr)
+	{
+		deleteSubtree(startingNode->left);
+	}
+	if (startingNode->right != nullptr)
+	{
+		deleteSubtree(startingNode->right);
+	}
+	delete startingNode;
 }
 
 void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
