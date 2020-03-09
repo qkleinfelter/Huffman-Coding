@@ -29,6 +29,8 @@ private:
 	string paddingBits = "";
 	ifstream inputStream;
 	ofstream outputStream;
+	int bytesIn = 0;
+	int bytesOut = 0;
 
 	void openFiles(string inputFile, string outputFile);
 	void buildFrequencyTable();

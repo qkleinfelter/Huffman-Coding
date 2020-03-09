@@ -59,9 +59,6 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	buildTree();
 	buildEncodingStrings(nodes[0], "");
 	encode();
-	int fries;
-	cin >> fries;
-	closeFiles();
 }
 
 int Huffman::getSmallestNodeIndex(int indexToSkip)
@@ -133,14 +130,13 @@ void Huffman::buildFrequencyTable()
 		frequencyTable[i] = 0;
 	}
 	char character;
-	unsigned int size = 0;
 	while (inputStream.get(character))
 	{
 		unsigned char realChar = (unsigned char)character;
 		frequencyTable[realChar]++;
-		size++;
+		bytesIn++;
 	}
-	cout << "Size: " << size << endl;
+	cout << "Size: " << bytesIn << endl;
 }
 
 void Huffman::openFiles(string inputFile, string outputFile)
@@ -194,6 +190,7 @@ void Huffman::buildTree()
 			//cout << smallestNodeIndex << " " << nextSmallestNodeIndex << endl;
 			outputStream.put((char)smallestNodeIndex);
 			outputStream.put((char)nextSmallestNodeIndex);
+			bytesOut += 2;
 		}
 		else {
 			parent->left = nextSmallestNode;
@@ -203,6 +200,7 @@ void Huffman::buildTree()
 			//cout << nextSmallestNodeIndex << " " << smallestNodeIndex << endl;
 			outputStream.put((char)nextSmallestNodeIndex);
 			outputStream.put((char)smallestNodeIndex);
+			bytesOut += 2;
 		}
 	}
 }
@@ -227,6 +225,7 @@ void Huffman::encode()
 				byte |= (on << (7 - i));
 			}
 			outputStream.put(byte);
+			bytesOut++;
 			//cout << "output " << byte << " to file" << endl;
 			buffer = buffer.substr(8);
 		}
@@ -241,7 +240,8 @@ void Huffman::encode()
 			byte |= (on << (7 - i));
 		}
 		outputStream.put(byte);
-		cout << "output " << byte << " to file" << endl;
+		bytesOut++;
+		//cout << "output " << byte << " to file" << endl;
 	}
 }
 
@@ -260,6 +260,7 @@ void Huffman::buildTreeFromFile()
 		char character1, character2;
 		inputStream.get(character1);
 		inputStream.get(character2);
+		bytesIn += 2;
 		unsigned char char1 = character1;
 		unsigned char char2 = character2;
 		node* parent = new node();
