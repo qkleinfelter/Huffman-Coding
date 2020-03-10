@@ -102,7 +102,7 @@ void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 	{
 		// We arrived at a leaf
 		encodingStrings[startingPoint->symbol] = currentPath;
-		if (currentPath.length() > 7 && paddingBits.length() != 0)
+		if (currentPath.length() > 7)
 			paddingBits = currentPath;
 		//cout << startingPoint->symbol << ": " << currentPath << endl;
 	}
