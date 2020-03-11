@@ -1,9 +1,10 @@
 #include "Huffman.h"
 #include <iostream>
+#include <time.h>
 
 Huffman::Huffman() : nodes{ nullptr }, frequencyTable { 0 }
 {
-
+	start = clock();
 }
 
 Huffman::~Huffman()
@@ -333,5 +334,18 @@ void Huffman::closeFiles()
 
 void Huffman::printActionDetail()
 {
-	cout << "Bytes in / Bytes Out: " << bytesIn << " / " << bytesOut << endl;
+	clock_t end = clock();
+	double secondsElapsed = difftime(end, start) / 1000;
+	cout << "Time: " << secondsElapsed << " seconds.   ";
+	cout << "Bytes in / Bytes Out: " << formatNumber(bytesIn) << " / " << formatNumber(bytesOut) << endl;
+}
+
+string Huffman::formatNumber(unsigned int num)
+{
+	string number = to_string(num);
+	for (int i = number.length() - 3; i > 0; i -= 3)
+	{
+		number = number.substr(0, i) + "," + number.substr(i);
+	}
+	return number;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <time.h>
 using namespace std;
 
 class Huffman
@@ -29,8 +30,9 @@ private:
 	string paddingBits = "";
 	ifstream inputStream;
 	ofstream outputStream;
-	int bytesIn = 0;
-	int bytesOut = 0;
+	unsigned int bytesIn = 0;
+	unsigned int bytesOut = 0;
+	clock_t start = clock();
 
 	void openFiles(string inputFile, string outputFile);
 	void buildFrequencyTable();
@@ -45,4 +47,5 @@ private:
 	void deleteSubtree(node* startingNode);
 
 	void printActionDetail();
+	string formatNumber(unsigned int num);
 };
