@@ -51,7 +51,7 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 		}
 	}
 	//cout << "A tree will be created from " << inputFile << " and placed into " << outputFile << endl;
-	openFiles(inputFile, outputFile);
+	openFiles(inputFile, outputFile, "");
 	buildFrequencyTable();
 	buildTree();
 	closeFiles();
@@ -69,11 +69,18 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	if (outputFile == "")
 	{
 		auto dotLoc = inputFile.find(".");
-		string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
-		outputFile = fileNameWithoutExtension + ".huf" ;
+		if (dotLoc == string::npos)
+		{
+			outputFile += ".huf";
+		}
+		else
+		{
+			string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
+			outputFile = fileNameWithoutExtension + ".huf";
+		}
 	}
 	//cout << inputFile << " will be encoded to " << outputFile << endl;
-	openFiles(inputFile, outputFile);
+	openFiles(inputFile, outputFile, "");
 	buildFrequencyTable();
 	buildTree();
 	buildEncodingStrings(nodes[0], "");
@@ -124,11 +131,10 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 	if (inputFile == outputFile)
 	{
 		cout << "Input File can not be equal to Output File" << endl;
-		DisplayHelp();
 		return;
 	}
-	openFiles(inputFile, outputFile);
-	buildTreeFromFile();
+	openFiles(inputFile, outputFile, "");
+	buildTreeFromFile(inputStream);
 	decode();
 	closeFiles();
 	printActionDetail();
@@ -136,6 +142,30 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 
 void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outputFile)
 {
+	if (inputFile == outputFile)
+	{
+		cout << "Input File can not be equal to Output File" << endl;
+		return;
+	}
+	if (outputFile == "")
+	{
+		auto dotLoc = inputFile.find(".");
+		if (dotLoc == string::npos)
+		{
+			outputFile += ".huf";
+		}
+		else
+		{
+			string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
+			outputFile = fileNameWithoutExtension + ".huf";
+		}
+	}
+	openFiles(inputFile, outputFile, treeFile);
+	buildTreeFromFile(treeStream);
+	buildEncodingStrings(nodes[0], "");
+	encode();
+	closeFiles();
+	printActionDetail();
 }
 
 void Huffman::DisplayHelp()
@@ -154,15 +184,24 @@ void Huffman::buildFrequencyTable()
 	{
 		unsigned char realChar = (unsigned char)character;
 		frequencyTable[realChar]++;
-		bytesIn++;
+		//bytesIn++;
 	}
 	//cout << "Size: " << bytesIn << endl;
 }
 
-void Huffman::openFiles(string inputFile, string outputFile)
+void Huffman::openFiles(string inputFile, string outputFile, string treeFile)
 {
 	inputStream.open(inputFile, ios::binary);
 	outputStream.open(outputFile, ios::binary);
+	if (treeFile.length() > 0)
+	{
+		treeStream.open(treeFile, ios::binary);
+		if (treeStream.fail())
+		{
+			cout << "Tree stream failed to open" << endl;
+			return;
+		}
+	}
 	if (inputStream.fail())
 	{
 		cout << "Input stream failed to open" << endl;
@@ -225,6 +264,7 @@ void Huffman::encode()
 	string buffer = "";
 	while (inputStream.get(character))
 	{
+		bytesIn++;
 		unsigned char realChar = character;
 		buffer += encodingStrings[realChar];
 		if (buffer.length() >= 8)
@@ -257,7 +297,7 @@ void Huffman::encode()
 	}
 }
 
-void Huffman::buildTreeFromFile()
+void Huffman::buildTreeFromFile(ifstream& file)
 {
 	for (int i = 0; i < numChars; i++)
 	{
@@ -270,8 +310,8 @@ void Huffman::buildTreeFromFile()
 	for (int i = 0; i < numChars - 1; i++)
 	{
 		char character1, character2;
-		inputStream.get(character1);
-		inputStream.get(character2);
+		file.get(character1);
+		file.get(character2);
 		bytesIn += 2;
 		unsigned char char1 = character1;
 		unsigned char char2 = character2;
@@ -322,6 +362,8 @@ void Huffman::closeFiles()
 		inputStream.close();
 	if (outputStream.is_open())
 		outputStream.close();
+	if (treeStream.is_open())
+		treeStream.close();
 }
 
 void Huffman::printActionDetail()

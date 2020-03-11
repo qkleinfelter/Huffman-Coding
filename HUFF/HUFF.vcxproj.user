@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>-e "C:\Users\Quinn\Desktop\Huffman Testing\Shakespeare.txt" "C:\Users\Quinn\Desktop\Huffman Testing\Quinnspeare.huf"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-d "C:\Users\Quinn\Downloads\EECS 1510 Sp2020 HW5.huf" "C:\Users\Quinn\Downloads\EECS 1510 Sp2020 HW5 DECODED.pdf"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

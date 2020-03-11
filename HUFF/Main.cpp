@@ -43,5 +43,16 @@ int main(int argc, char* argv[])
     {
         huffman->DecodeFile(argv[2], argv[3]);
     }
+    if ((argc == 4 || argc == 5) && flag == "-et")
+    {
+        if (argc == 4)
+        {
+            huffman->EncodeFileWithTree(argv[2], argv[3], "");
+        }
+        else
+        {
+            huffman->EncodeFileWithTree(argv[2], argv[3], argv[4]);
+        }
+    }
     delete huffman;
 }

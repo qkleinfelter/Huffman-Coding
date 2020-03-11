@@ -29,16 +29,17 @@ private:
 	string encodingStrings[256];
 	string paddingBits = "";
 	ifstream inputStream;
+	ifstream treeStream;
 	ofstream outputStream;
 	unsigned int bytesIn = 0;
 	unsigned int bytesOut = 0;
 	clock_t start = clock();
 
-	void openFiles(string inputFile, string outputFile);
+	void openFiles(string inputFile, string outputFile, string treeFile);
 	void buildFrequencyTable();
 	int getSmallestNodeIndex(int indexToSkip);
 	void buildTree();
-	void buildTreeFromFile();
+	void buildTreeFromFile(ifstream& file);
 	void buildEncodingStrings(node* startingPoint, string currentPath);
 	void encode();
 	void decode();
