@@ -134,21 +134,27 @@ int Huffman::getSmallestNodeIndex(int indexToSkip)
 
 void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 {
-	if (startingPoint == nullptr) return;
-	if (startingPoint->symbol)
+	// Recursive helper method to build out a table of encoding strings for the symbols
+	if (startingPoint == nullptr) return; // If the node we are at is null, return
+	if (isLeaf(startingPoint))
 	{
-		// We arrived at a leaf
-		encodingStrings[startingPoint->symbol] = currentPath;
-		if (currentPath.length() > 7)
-			paddingBits = currentPath;
-		//cout << startingPoint->symbol << ": " << currentPath << endl;
+		// We arrived at a leaf so we need to keep track of the path
+		encodingStrings[startingPoint->symbol] = currentPath; // Set the encoding string for the symbol we are at to the currentPath
+		if (currentPath.length() > 7) // If our currentPath has a length greater than 7 we know it is fine to use as padding
+		{
+			paddingBits = currentPath; // Set our padding to be the current path since its long enough
+		}
+
+		return; // There is nothing more we need to do on this path so return our
 	}
 	if (startingPoint->left != nullptr)
 	{
+		// If the left child isn't null recursively build the encoding strings down that path, adding a 0 to the current path
 		buildEncodingStrings(startingPoint->left, currentPath + "0");
 	}
 	if (startingPoint->right != nullptr)
 	{
+		// If the right child isn't null recursively build the encoding strings down that path, adding a 1 to the current path
 		buildEncodingStrings(startingPoint->right, currentPath + "1");
 	}
 }
@@ -284,18 +290,17 @@ void Huffman::buildTree()
 
 void Huffman::encode()
 {
-	inputStream.clear();
-	inputStream.seekg(0);
-	char character;
-	string buffer = "";
-	while (inputStream.get(character))
+	inputStream.clear(); // Clear out any errors we may have in our inputStream
+	inputStream.seekg(0); // Make sure our input is at the beginning of the file
+	char character; // Character to get the input into 
+	string buffer = ""; // A buffer string that we will fill up with encoding strings
+	while (inputStream.get(character)) // Loop through the input, getting each character into character
 	{
-		bytesIn++;
-		unsigned char realChar = character;
-		buffer += encodingStrings[realChar];
-		if (buffer.length() >= 8)
+		bytesIn++; // We read in a byte so increment it
+		unsigned char realChar = character; // Coerce our character into an unsigned char so we don't get array access errors
+		buffer += encodingStrings[realChar]; // Add the encoding string for our current character to the buffer
+		while (buffer.length() >= 8) // While our buffer length is greater than or equal to 8, we need to encode it into our output file
 		{
-			// Do some bitwise shit
 			unsigned char byte = 0;
 			for (int i = 0; i <= 7; i++)
 			{
@@ -373,7 +378,7 @@ void Huffman::decode()
 void Huffman::followTree(unsigned char byte, int checkBit, node*& currentNode)
 {
 	currentNode = byte & checkBit ? currentNode->right : currentNode->left;
-	if (currentNode->left == nullptr && currentNode->right == nullptr)
+	if (isLeaf(currentNode))
 	{
 		outputStream.put(currentNode->symbol);
 		//cout << "printed " << currentNode->symbol << " to file" << endl;
@@ -408,4 +413,10 @@ string Huffman::formatNumber(unsigned int num)
 		number = number.substr(0, i) + "," + number.substr(i);
 	}
 	return number;
+}
+
+bool Huffman::isLeaf(node* node)
+{
+	// Helper method to check if a node is a leaf
+	return node->left == nullptr && node->right == nullptr;
 }

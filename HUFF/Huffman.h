@@ -56,4 +56,6 @@ private:
 
 	void printActionDetail(); // Helper method to print out information about how the file ran, i.e., elapsed time and bytes in / out
 	string formatNumber(unsigned int num); // Helper method that formats an unsigned int to contain commas in the correct places
+
+	bool isLeaf(node* node);
 };
