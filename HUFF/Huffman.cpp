@@ -1,14 +1,35 @@
+/*
+	File: Huffman.cpp - Implementation of Huffman Encoding using a tree
+	c.f.: Huffman.h
+
+	This class implements a Huffman encoding of a given file using a tree.
+	Each node contains a symbol, the number of times the symbol appears in the input, 
+	and a pointer to its left and right children.
+
+	Author: Quinn Kleinfelter
+	Class: EECS 2510-001 Non Linear Data Structures Spring 2020
+	Instructor: Dr. Thomas
+	Last Edited: 3/11/20
+	Copyright: Copyright 2020 by Quinn Kleinfelter. All rights reserved.
+*/
+
+
 #include "Huffman.h"
 #include <iostream>
 #include <time.h>
 
 Huffman::Huffman() : nodes{ nullptr }, frequencyTable { 0 }
 {
+	// Constructor, not much to do here except start out our clock and make sure our
+	// arrays are initialized to nullptr and 0, as seen above, to ensure we don't get
+	// warnings from Visual Studio
 	start = clock();
 }
 
 Huffman::~Huffman()
 {
+	// Destructor, all we need to do here is loop through all of our nodes and if the
+	// current spot isn't null delete it and its subtrees
 	for (int i = 0; i < numChars; i++)
 	{
 		if (nodes[i] != nullptr)
@@ -18,15 +39,18 @@ Huffman::~Huffman()
 
 void Huffman::deleteSubtree(node* startingNode)
 {
+	// Helper method that deletes the subtrees of a node
 	if (startingNode->left != nullptr)
 	{
+		// If the left child isn't null, recursively delete its subtrees
 		deleteSubtree(startingNode->left);
 	}
 	if (startingNode->right != nullptr)
 	{
+		// If the right child isn't null, recursively delete its subtrees
 		deleteSubtree(startingNode->right);
 	}
-	delete startingNode;
+	delete startingNode; // Once we've deleted its children it is safe to delete the start
 }
 
 void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
@@ -60,32 +84,35 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 
 void Huffman::EncodeFile(string inputFile, string outputFile)
 {
+	// Encodes the inputFile into the outputFile
 	if (inputFile == outputFile)
 	{
+		// If the input file and output file refer to the same thing display an error and exit out
 		cout << "Input File can not be equal to Output File" << endl;
-		DisplayHelp();
 		return;
 	}
 	if (outputFile == "")
 	{
-		auto dotLoc = inputFile.find(".");
+		// If the output file isn't specified, we need to determine it from the inputfile
+		auto dotLoc = inputFile.find("."); // Check if a . exists in the inputFile name
 		if (dotLoc == string::npos)
 		{
-			outputFile += ".huf";
+			// If there isn't a . in the inputFile name, simply append .huf to the inputFile and make it the output
+			outputFile = inputFile + ".huf";
 		}
 		else
 		{
+			// Otherwise, since a . exists, grab the subtring before that dot
 			string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
-			outputFile = fileNameWithoutExtension + ".huf";
+			outputFile = fileNameWithoutExtension + ".huf"; // And make the output file equal to the inputFile but with its extension changed to .huf
 		}
 	}
-	//cout << inputFile << " will be encoded to " << outputFile << endl;
-	openFiles(inputFile, outputFile, "");
-	buildFrequencyTable();
-	buildTree();
-	buildEncodingStrings(nodes[0], "");
-	encode();
-	printActionDetail();
+	openFiles(inputFile, outputFile, ""); // Open up our files into our streams, treeFile is not needed so we don't use it
+	buildFrequencyTable(); // Build the frequency table from our input file
+	buildTree(); // Build the tree based on our frequency table
+	buildEncodingStrings(nodes[0], ""); // Build our list of encoding strings based on the tree
+	encode(); // Actually encode the file
+	printActionDetail(); // Print out the runtime / space information
 }
 
 int Huffman::getSmallestNodeIndex(int indexToSkip)
@@ -187,23 +214,24 @@ void Huffman::buildFrequencyTable()
 
 void Huffman::openFiles(string inputFile, string outputFile, string treeFile)
 {
-	inputStream.open(inputFile, ios::binary);
-	outputStream.open(outputFile, ios::binary);
-	if (treeFile.length() > 0)
+	// Helper method to open up the given files
+	inputStream.open(inputFile, ios::binary); // We ALWAYS want to open up an inputFile, in binary mode
+	outputStream.open(outputFile, ios::binary); // We ALWAYS want to open up an outputFile, in binary mode
+	if (treeFile.length() > 0) // If our treeFile string has a length greater than 0, we must want it so try to open it
 	{
-		treeStream.open(treeFile, ios::binary);
-		if (treeStream.fail())
+		treeStream.open(treeFile, ios::binary); // Open up the treeFile, in binary mode
+		if (treeStream.fail()) // If we fail to open, display an error and return
 		{
 			cout << "Tree stream failed to open" << endl;
 			return;
 		}
 	}
-	if (inputStream.fail())
+	if (inputStream.fail()) // If we failed to open the inputFile display an error and return
 	{
 		cout << "Input stream failed to open" << endl;
 		return;
 	}
-	if (outputStream.fail())
+	if (outputStream.fail()) // If we failed to open the outputFile display an error and return
 	{
 		cout << "Output stream failed to open" << endl;
 		return;

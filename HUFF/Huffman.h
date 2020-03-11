@@ -2,7 +2,7 @@
 	Quinn Kleinfelter
 	EECS 2520-001 Non Linear Data Structures Spring 2020
 	Dr. Thomas
-	Last Edited: 2/19/20
+	Last Edited: 3/11/20
 */
 
 #pragma once
