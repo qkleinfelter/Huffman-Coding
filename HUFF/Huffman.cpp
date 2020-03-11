@@ -175,10 +175,6 @@ void Huffman::DisplayHelp()
 
 void Huffman::buildFrequencyTable()
 {
-	for (int i = 0; i < numChars; i++)
-	{
-		frequencyTable[i] = 0;
-	}
 	char character;
 	while (inputStream.get(character))
 	{
