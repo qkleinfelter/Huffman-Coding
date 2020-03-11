@@ -50,7 +50,7 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 			outputFile = fileNameWithoutExtension + ".htree";
 		}
 	}
-	cout << "A tree will be created from " << inputFile << " and placed into " << outputFile << endl;
+	//cout << "A tree will be created from " << inputFile << " and placed into " << outputFile << endl;
 	openFiles(inputFile, outputFile);
 	buildFrequencyTable();
 	buildTree();
@@ -72,7 +72,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 		string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
 		outputFile = fileNameWithoutExtension + ".huf" ;
 	}
-	cout << inputFile << " will be encoded to " << outputFile << endl;
+	//cout << inputFile << " will be encoded to " << outputFile << endl;
 	openFiles(inputFile, outputFile);
 	buildFrequencyTable();
 	buildTree();
@@ -156,7 +156,7 @@ void Huffman::buildFrequencyTable()
 		frequencyTable[realChar]++;
 		bytesIn++;
 	}
-	cout << "Size: " << bytesIn << endl;
+	//cout << "Size: " << bytesIn << endl;
 }
 
 void Huffman::openFiles(string inputFile, string outputFile)
@@ -172,14 +172,6 @@ void Huffman::openFiles(string inputFile, string outputFile)
 	{
 		cout << "Output stream failed to open" << endl;
 		return;
-	}
-	if (inputStream.is_open())
-	{
-		cout << "Input stream is open" << endl;
-	}
-	if (outputStream.is_open())
-	{
-		cout << "Output stream is open" << endl;
 	}
 }
 
