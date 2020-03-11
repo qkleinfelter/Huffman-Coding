@@ -54,6 +54,7 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 	buildFrequencyTable();
 	buildTree();
 	closeFiles();
+	printActionDetail();
 }
 
 void Huffman::EncodeFile(string inputFile, string outputFile)
@@ -76,6 +77,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 	buildTree();
 	buildEncodingStrings(nodes[0], "");
 	encode();
+	printActionDetail();
 }
 
 int Huffman::getSmallestNodeIndex(int indexToSkip)
@@ -128,6 +130,7 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 	buildTreeFromFile();
 	decode();
 	closeFiles();
+	printActionDetail();
 }
 
 void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outputFile)
@@ -326,4 +329,9 @@ void Huffman::closeFiles()
 		inputStream.close();
 	if (outputStream.is_open())
 		outputStream.close();
+}
+
+void Huffman::printActionDetail()
+{
+	cout << "Bytes in / Bytes Out: " << bytesIn << " / " << bytesOut << endl;
 }

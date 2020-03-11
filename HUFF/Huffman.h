@@ -43,4 +43,6 @@ private:
 	void followTree(unsigned char byte, int checkBit, node*& currentNode);
 	void closeFiles();
 	void deleteSubtree(node* startingNode);
+
+	void printActionDetail();
 };
