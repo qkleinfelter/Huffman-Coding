@@ -27,8 +27,8 @@ private:
 	{
 		unsigned char symbol; // The ASCII symbol this node represents, only matters in the leaves
 		unsigned int weight; // The weight of the node, either the frequency that the symbol occurs, or the added weights of the children
-		node* left = NULL; // Left child node
-		node* right = NULL; // Right child node
+		node* left = nullptr; // Left child node
+		node* right = nullptr; // Right child node
 	};
 	const static int numChars = 256; // Constant to keep track of the number of distinct characters we have, in this case 256, to represent 0-255 in ASCII
 	unsigned int frequencyTable[numChars]; // A frequency table array, keeps track of the count of each character

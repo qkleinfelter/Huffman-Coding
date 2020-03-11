@@ -202,14 +202,13 @@ void Huffman::DisplayHelp()
 
 void Huffman::buildFrequencyTable()
 {
-	char character;
-	while (inputStream.get(character))
+	// Helper method to build out our frequency table
+	char character; // Variable to store the next character from the file
+	while (inputStream.get(character)) // inputStream.get(char) returns true if it was able to place the next char from the file into its parameter, so we can just loop on that
 	{
-		unsigned char realChar = (unsigned char)character;
-		frequencyTable[realChar]++;
-		//bytesIn++;
+		unsigned char realChar = (unsigned char)character; // Once we know we have read a character we want to cast it into an unsigned char so that we don't have array access errors
+		frequencyTable[realChar]++; // Increment the frequencyTable in the appropriate location (an unsigned char will automatically cast into its int ASCII value for array access)
 	}
-	//cout << "Size: " << bytesIn << endl;
 }
 
 void Huffman::openFiles(string inputFile, string outputFile, string treeFile)
@@ -240,42 +239,45 @@ void Huffman::openFiles(string inputFile, string outputFile, string treeFile)
 
 void Huffman::buildTree()
 {
+	// Helper method to build our tree from the frequency table
 	for (int i = 0; i < numChars; i++)
 	{
-		node* newNode = new node();
-		newNode->weight = frequencyTable[i];
-		newNode->symbol = (unsigned char)i;
-		newNode->left = newNode->right = nullptr;
-		nodes[i] = newNode;
+		// Loop through all of the characters in the frequency table,
+		// building a node for each one with its given frequency
+		node* newNode = new node(); // Create a new node
+		newNode->weight = frequencyTable[i]; // Set the weight of the node equal to its value from the frequency table
+		newNode->symbol = (unsigned char)i; // Make the symbol of the node equal to its int value casted to an unsigned char
+		newNode->left = newNode->right = nullptr; // Make the left and right children nullptr (redundant)
+		nodes[i] = newNode; // Set our current location in the nodes array to be the node we just made
 	}
 	for (int i = 0; i < numChars - 1; i++)
 	{
-		int smallestNodeIndex = getSmallestNodeIndex(-1);
-		int nextSmallestNodeIndex = getSmallestNodeIndex(smallestNodeIndex);
-		node* smallestNode = nodes[smallestNodeIndex];
-		node* nextSmallestNode = nodes[nextSmallestNodeIndex];
-		node* parent = new node();
-		parent->weight = smallestNode->weight + nextSmallestNode->weight;
-		if (smallestNodeIndex < nextSmallestNodeIndex)
+		// Loop through the number of characters we have - 1, this is the amount we always need to build a tree
+		int smallestNodeIndex = getSmallestNodeIndex(-1); // Grab the index of the smallest node in our nodes array, without skipping any indexes
+		int nextSmallestNodeIndex = getSmallestNodeIndex(smallestNodeIndex); // Grab the index of the next smallest node in our nodes array, making sure we skip the smallest index
+		node* smallestNode = nodes[smallestNodeIndex]; // Grab the node that is the smallest
+		node* nextSmallestNode = nodes[nextSmallestNodeIndex]; // Grab the node that is the next smallest
+		node* parent = new node(); // Make a new parent node to hold these nodes
+		parent->weight = smallestNode->weight + nextSmallestNode->weight; // Set the weight of the parent to be the weights of the nodes added together
+		if (smallestNodeIndex < nextSmallestNodeIndex) // If smallestNode occurs earlier in the list, we make it the left child
 		{
-			parent->left = smallestNode;
-			parent->right = nextSmallestNode;
-			nodes[nextSmallestNodeIndex] = nullptr;
-			nodes[smallestNodeIndex] = parent;
-			//cout << smallestNodeIndex << " " << nextSmallestNodeIndex << endl;
-			outputStream.put((char)smallestNodeIndex);
-			outputStream.put((char)nextSmallestNodeIndex);
-			bytesOut += 2;
+			parent->left = smallestNode; // Make our parents left child smallestNode
+			parent->right = nextSmallestNode; // Make our parents right child nextSmallestNode
+			nodes[nextSmallestNodeIndex] = nullptr; // Set the location in nodes[] where nextSmallestNode used to be equal to nullptr
+			nodes[smallestNodeIndex] = parent; // Set the location in nodes[] where smallestNode used to be equal to the parent
+			outputStream.put((char)smallestNodeIndex); // Output the smallestNodeIndex casted to a char, so others can build the tree as needed
+			outputStream.put((char)nextSmallestNodeIndex); // Output the nextSmallestNodeIndex casted to a char, so others can build the tree as needed
+			bytesOut += 2; // Increase our bytesOut by 2 since we printed 2 to the file
 		}
-		else {
-			parent->left = nextSmallestNode;
-			parent->right = smallestNode;
-			nodes[smallestNodeIndex] = nullptr;
-			nodes[nextSmallestNodeIndex] = parent;
-			//cout << nextSmallestNodeIndex << " " << smallestNodeIndex << endl;
-			outputStream.put((char)nextSmallestNodeIndex);
-			outputStream.put((char)smallestNodeIndex);
-			bytesOut += 2;
+		else // If we get here, we know nextSmallestNode occurs earlier in the list, so it should be our left child
+		{
+			parent->left = nextSmallestNode; // Make our parents left child nextSmallestNode
+			parent->right = smallestNode; // Make our parents right child smallestNode
+			nodes[smallestNodeIndex] = nullptr; // Set the location in nodes[] where smallestNode used to be equal to nullptr
+			nodes[nextSmallestNodeIndex] = parent; // Set the location in nodes[] where nextSmallestNode used to be equal to the parent
+			outputStream.put((char)nextSmallestNodeIndex); // Output the nextSmallestNodeIndex casted to a char, so others can build the tree as needed
+			outputStream.put((char)smallestNodeIndex); // Output the SmallestNodeIndex casted to a char, so others can build the tree as needed
+			bytesOut += 2; // Increase our bytesOut by 2 since we printed 2 to the file
 		}
 	}
 }
