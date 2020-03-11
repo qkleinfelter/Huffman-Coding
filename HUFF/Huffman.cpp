@@ -398,24 +398,28 @@ void Huffman::closeFiles()
 
 void Huffman::printActionDetail()
 {
-	clock_t end = clock();
-	double secondsElapsed = difftime(end, start) / 1000;
-	cout << "Time: " << secondsElapsed << " seconds.   ";
-	cout << "Bytes in / Bytes Out: " << formatNumber(bytesIn) << " / " << formatNumber(bytesOut) << endl;
+	// Helper method to print out information for what work we did
+	clock_t end = clock(); // Grab the current time
+	double secondsElapsed = difftime(end, start) / 1000; // Determine the amount of seconds elapsed from when we started our work on the file
+	cout << "Time: " << secondsElapsed << " seconds.   "; // Output the elapsed time followed by a few spaces
+	cout << "Bytes in / Bytes Out: " << formatNumber(bytesIn) << " / " << formatNumber(bytesOut) << endl; // Output our nicely formatted bytesIn and bytesOut numbers using a helper method below
 }
 
 string Huffman::formatNumber(unsigned int num)
 {
-	string number = to_string(num);
-	for (int i = number.length() - 3; i > 0; i -= 3)
+	// Helper method that formats an unsigned int we take as a parameter
+	// to contain commas in the appropriate places (American format, not using period like some European countries)
+	string number = to_string(num); // Turn the number into a string
+	for (int i = number.length() - 3; i > 0; i -= 3) // Starting 3 in from the end of the string, and looping through decrementing by 3 each time, until we reach the beginning of the string
 	{
-		number = number.substr(0, i) + "," + number.substr(i);
+		number = number.substr(0, i) + "," + number.substr(i); // Update our number string to be the substring before i, where we want a comma, plus a comma, plus the substring after i
 	}
-	return number;
+	return number; // Return our nicely formatted number!
 }
 
 bool Huffman::isLeaf(node* node)
 {
 	// Helper method to check if a node is a leaf
+	// If both children are null, the node is a leaf
 	return node->left == nullptr && node->right == nullptr;
 }
