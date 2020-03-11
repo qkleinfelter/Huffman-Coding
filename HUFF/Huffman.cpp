@@ -301,30 +301,29 @@ void Huffman::encode()
 		buffer += encodingStrings[realChar]; // Add the encoding string for our current character to the buffer
 		while (buffer.length() >= 8) // While our buffer length is greater than or equal to 8, we need to encode it into our output file
 		{
-			unsigned char byte = 0;
-			for (int i = 0; i <= 7; i++)
+			unsigned char byte = 0; // Make a new unsigned char to keep track of our byte
+			for (int i = 0; i <= 7; i++) // Loop 8 times
 			{
-				bool on = buffer[i] == '1';
-				byte |= (on << (7 - i));
+				bool on = buffer[i] == '1'; // Make a boolean variable to determine if the current spot we are on in the buffer is 1 or not
+				byte |= (on << (7 - i)); // Use the bitwise or operator on our byte to set the current location (0-7) to that locations value in the buffer
 			}
-			outputStream.put(byte);
-			bytesOut++;
-			//cout << "output " << byte << " to file" << endl;
-			buffer = buffer.substr(8);
+			outputStream.put(byte); // Output our byte to the file
+			bytesOut++; // Increment our bytesOut counter
+			buffer = buffer.substr(8); // Set our buffer equal to the substring from position 8 (after the bits we have encoded) to the end
 		}
 	}
-	if (buffer.length() < 8)
+	if (buffer.length() < 8 && buffer.length() > 0) // If we still have something left in our buffer after looping through then we need to handle padding
 	{
-		buffer += paddingBits;
-		unsigned char byte = 0;
-		for (int i = 0; i <= 7; i++)
+		buffer += paddingBits; // Add our padding bits onto the buffer
+		// Now do the same encoding process as above, but only once
+		unsigned char byte = 0; // Make a new unsigned char to keep track of our byte
+		for (int i = 0; i <= 7; i++) // Loop 8 times
 		{
-			bool on = buffer[i] == '1';
-			byte |= (on << (7 - i));
+			bool on = buffer[i] == '1'; // Make a boolean variable to determine if the current spot we are on in the buffer is 1 or not
+			byte |= (on << (7 - i)); // Use the bitwise or operator on our byte to set the current location (0-7) to that locations value in the buffer
 		}
-		outputStream.put(byte);
-		bytesOut++;
-		//cout << "output " << byte << " to file" << endl;
+		outputStream.put(byte); // Output our byte to the file
+		bytesOut++; // Increment our bytesOut counter
 	}
 }
 
