@@ -2,7 +2,7 @@
 	Quinn Kleinfelter
 	EECS 2520-001 Non Linear Data Structures Spring 2020
 	Dr. Thomas
-	Last Edited: 3/11/20
+	Last Edited: 3/13/20
 */
 
 #pragma once
@@ -57,5 +57,5 @@ private:
 	void printActionDetail(); // Helper method to print out information about how the file ran, i.e., elapsed time and bytes in / out
 	string formatNumber(unsigned int num); // Helper method that formats an unsigned int to contain commas in the correct places
 
-	bool isLeaf(node* node);
+	bool isLeaf(node* node); // Helper method that we use to check if we are at a leaf
 };

@@ -9,7 +9,7 @@
 	Author: Quinn Kleinfelter
 	Class: EECS 2510-001 Non Linear Data Structures Spring 2020
 	Instructor: Dr. Thomas
-	Last Edited: 3/11/20
+	Last Edited: 3/13/20
 	Copyright: Copyright 2020 by Quinn Kleinfelter. All rights reserved.
 */
 
@@ -55,31 +55,38 @@ void Huffman::deleteSubtree(node* startingNode)
 
 void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 {
+	// This method constructs tree building information based on an
+	// inputFile and then places it into outputFile. This implements 
+	// our -t command line parameter, and can be used for future -et runs.
 	if (inputFile == outputFile)
 	{
+		// The input can't also be the output, so we display an error and exit
 		cout << "Input File can not be equal to Output File" << endl;
-		DisplayHelp();
 		return;
 	}
 	if (outputFile == "")
 	{
+		// If we don't have an output file, we want to figure it out based on our input
+		// First we look for a period
 		auto dotLoc = inputFile.find(".");
 		if (dotLoc == string::npos)
 		{
-			outputFile += ".htree";
+			// If there isn't a period (meaning no extension), we simply append
+			// .htree to the inputFile name for our output
+			outputFile = inputFile + ".htree";
 		}
 		else
 		{
+			// Otherwise, we want to remove the extension and replace it with .htree
 			string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
 			outputFile = fileNameWithoutExtension + ".htree";
 		}
 	}
-	//cout << "A tree will be created from " << inputFile << " and placed into " << outputFile << endl;
-	openFiles(inputFile, outputFile, "");
-	buildFrequencyTable();
-	buildTree();
-	closeFiles();
-	printActionDetail();
+	openFiles(inputFile, outputFile, ""); // Open up our input and output streams, we don't need a tree stream for this
+	buildFrequencyTable(); // Build out a frequency table from our input file
+	buildTree(); // Build the tree based on that frequency table
+	closeFiles(); // Close out the files since that's all we want to do!
+	printActionDetail(); // Print out information about what we did!
 }
 
 void Huffman::EncodeFile(string inputFile, string outputFile)
