@@ -42,7 +42,7 @@ private:
 	unsigned int bytesOut = 0; // Unsigned int to keep track of the amount of bytes we print out, so we can output this number eventually
 	clock_t start = clock(); // The time we started running the program in clock ticks, so we can keep track of how long our program runs
 
-	void openFiles(string inputFile, string outputFile, string treeFile); // Helper method to open up our files into the appropriate streams
+	bool openFiles(string inputFile, string outputFile, string treeFile); // Helper method to open up our files into the appropriate streams
 	void buildFrequencyTable(); // Helper method that builds the frequency table for the input file
 	int getSmallestNodeIndex(int indexToSkip); // Helper method that gets the smallest node index from our nodes array, skipping the input parameter so we don't output the same index twice
 	void buildTree(); // Helper method that combines items in the nodes[] array to build our tree

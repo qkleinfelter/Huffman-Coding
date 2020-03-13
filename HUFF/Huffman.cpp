@@ -82,7 +82,7 @@ void Huffman::MakeTreeBuilder(string inputFile, string outputFile)
 			outputFile = fileNameWithoutExtension + ".htree";
 		}
 	}
-	openFiles(inputFile, outputFile, ""); // Open up our input and output streams, we don't need a tree stream for this
+	if(!openFiles(inputFile, outputFile, "")) return; // Open up our input and output streams, we don't need a tree stream for this, return and exit if any fail
 	buildFrequencyTable(); // Build out a frequency table from our input file
 	buildTree(); // Build the tree based on that frequency table
 	closeFiles(); // Close out the files since that's all we want to do!
@@ -114,7 +114,7 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 			outputFile = fileNameWithoutExtension + ".huf"; // And make the output file equal to the inputFile but with its extension changed to .huf
 		}
 	}
-	openFiles(inputFile, outputFile, ""); // Open up our files into our streams, treeFile is not needed so we don't use it
+	if (!openFiles(inputFile, outputFile, "")) return;  // Open up our files into our streams, treeFile is not needed so we don't use it, return and exit if any fail
 	buildFrequencyTable(); // Build the frequency table from our input file
 	buildTree(); // Build the tree based on our frequency table
 	buildEncodingStrings(nodes[0], ""); // Build our list of encoding strings based on the tree
@@ -181,7 +181,7 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 		cout << "Input File can not be equal to Output File" << endl;
 		return;
 	}
-	openFiles(inputFile, outputFile, ""); // Open up our input and output files, we don't need a tree stream here
+	if (!openFiles(inputFile, outputFile, "")) return;  // Open up our input and output files, we don't need a tree stream here, return and exit if any fail
 	buildTreeFromFile(inputStream); // Build a tree from our input file, since our input must contain tree builder info
 	decode(); // Decode the file based on the tree we built
 	closeFiles(); // Close out the files now that we're done
@@ -216,7 +216,7 @@ void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outpu
 			outputFile = fileNameWithoutExtension + ".huf";
 		}
 	}
-	openFiles(inputFile, outputFile, treeFile); // Open up all three of our files as we need
+	if (!openFiles(inputFile, outputFile, treeFile)) return;  // Open up all three of our files as we need, return and exit if any fail
 	buildTreeFromFile(treeStream); // Build our tree based on the information from our treeStream
 	buildEncodingStrings(nodes[0], ""); // Build our table of encoding strings from that tree
 	encode(); // Encode the file
@@ -246,7 +246,7 @@ void Huffman::buildFrequencyTable()
 	}
 }
 
-void Huffman::openFiles(string inputFile, string outputFile, string treeFile)
+bool Huffman::openFiles(string inputFile, string outputFile, string treeFile)
 {
 	// Helper method to open up the given files
 	inputStream.open(inputFile, ios::binary); // We ALWAYS want to open up an inputFile, in binary mode
@@ -254,22 +254,23 @@ void Huffman::openFiles(string inputFile, string outputFile, string treeFile)
 	if (treeFile.length() > 0) // If our treeFile string has a length greater than 0, we must want it so try to open it
 	{
 		treeStream.open(treeFile, ios::binary); // Open up the treeFile, in binary mode
-		if (treeStream.fail()) // If we fail to open, display an error and return
+		if (treeStream.fail()) // If we fail to open, display an error and return false
 		{
 			cout << "Tree stream failed to open" << endl;
-			return;
+			return false;
 		}
 	}
-	if (inputStream.fail()) // If we failed to open the inputFile display an error and return
+	if (inputStream.fail()) // If we failed to open the inputFile display an error and return false
 	{
 		cout << "Input stream failed to open" << endl;
-		return;
+		return false;
 	}
-	if (outputStream.fail()) // If we failed to open the outputFile display an error and return
+	if (outputStream.fail()) // If we failed to open the outputFile display an error and return false
 	{
 		cout << "Output stream failed to open" << endl;
-		return;
+		return false;
 	}
+	return true; // If we made it here, everything is open so we can return true
 }
 
 void Huffman::buildTree()
