@@ -226,7 +226,13 @@ void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outpu
 
 void Huffman::DisplayHelp()
 {
-	cout << "A help message" << endl;
+	// This is a method to display help information about our project
+	cout << "Available command line options" << endl;
+	cout << "HUFF -h | -? | -help will display this message again" << endl;
+	cout << "HUFF -e file1 [file2] will encode file1, placing the output into file2, or file1 with extension changed to .huf" << endl;
+	cout << "HUFF -d file1 file2 Decodes Huffman-Encoded file1 into file2" << endl;
+	cout << "HUFF -t file1 [file2] will create 510 byte tree building information and output it into file2, or file1 with extension changed to .htree" << endl;
+	cout << "HUFF -et file1 file2 [file3] will encode file1, using tree building information in file2, and output into file3, or file1 with extension changed to .huf" << endl;
 }
 
 void Huffman::buildFrequencyTable()
