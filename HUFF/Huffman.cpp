@@ -359,71 +359,85 @@ void Huffman::encode()
 
 void Huffman::buildTreeFromFile(ifstream& file)
 {
+	// This method builds a tree based on the information from a file,
+	// which we can choose by passing in the correct ifstream
 	for (int i = 0; i < numChars; i++)
 	{
+		// Loop through the number of characters we have, creating empty nodes for
+		// each one, in our nodes array
 		node* newNode = new node();
-		newNode->weight = 0;
-		newNode->symbol = (unsigned char)i;
-		newNode->left = newNode->right = nullptr;
-		nodes[i] = newNode;
+		newNode->weight = 0; // We don't care about their weight since we know the combination order
+		newNode->symbol = (unsigned char)i; // Make sure our symbol is based on the correct location in the list
+		newNode->left = newNode->right = nullptr; // Make sure their child pointers are null
+		nodes[i] = newNode; // Set the location we are at in nodes[] to be the new node
 	}
 	for (int i = 0; i < numChars - 1; i++)
 	{
-		char character1, character2;
-		file.get(character1);
-		file.get(character2);
-		bytesIn += 2;
-		unsigned char char1 = character1;
-		unsigned char char2 = character2;
-		node* parent = new node();
-		parent->weight = 0;
-		parent->symbol = NULL;
-		parent->left = nodes[char1];
-		parent->right = nodes[char2];
-		nodes[char2] = nullptr;
-		nodes[char1] = parent;
+		// Loop through the number of characters we have - 1, since we can always combine
+		// All of our nodes into one tree in this many passes
+		char character1, character2; // Character variables to hold our input info
+		file.get(character1); // Grab the next character and put it in character1
+		file.get(character2); // Grab the next character and put it in character2
+		bytesIn += 2; // Increment our bytesIn counter by 2 since we read in 2 bytes
+		unsigned char char1 = character1; // Coerce character1 into an unsigned char so we don't get array access errors
+		unsigned char char2 = character2; // Coerce character2 into an unsigned char so we don't get array access errors
+		node* parent = new node(); // Create a parent node to hold these 2
+		parent->weight = 0; // Weight is 0, since we don't care about it 
+		parent->symbol = NULL; // Symbol is NULL since we aren't at a leaf
+		parent->left = nodes[char1]; // The left child will always be whatever was our first of the 2 chars read in
+		parent->right = nodes[char2]; // The right child will always be whatever was our second of the 2 chars read in
+		nodes[char2] = nullptr; // Set the location where char2 was in the nodes array to null
+		nodes[char1] = parent; // Set the location where char1 was in the nodes array to the new parent node
 	}
 }
 
 void Huffman::decode()
 {
-	char character;
-	node* currentNode = nodes[0];
+	// This function decodes our huffman encoded file
+	char character; // Character variable to be used as a placeholder
+	node* currentNode = nodes[0]; // Our currentNode always starts as nodes[0] since that is the root of our built up tree
 	while (inputStream.get(character))
 	{
-		bytesIn++;
-		unsigned char byte = character;
-		followTree(byte, 128, currentNode);
-		followTree(byte, 64, currentNode);
-		followTree(byte, 32, currentNode);
-		followTree(byte, 16, currentNode);
-		followTree(byte, 8, currentNode);
-		followTree(byte, 4, currentNode);
-		followTree(byte, 2, currentNode);
-		followTree(byte, 1, currentNode);
+		// Loop through all of the characters in the inputStream, placing them into character
+		bytesIn++; // Increment bytesIn for each one, since we read a byte in
+		unsigned char byte = character; // Coerce our character into an unsigned char which is the basis for our byte
+		followTree(byte, 128, currentNode); // Use our followTree method to go the correct direction based on the left-most bit (equivalent to 128 in decimal)
+		followTree(byte, 64, currentNode); // Use our followTree method to go the correct direction based on the second to left-most bit (equivalent to 64 in decimal)
+		followTree(byte, 32, currentNode); // Use our followTree method to go the correct direction based on the third to left-most bit (equivalent to 32 in decimal)
+		followTree(byte, 16, currentNode); // Use our followTree method to go the correct direction based on the fourth to left-most bit (equivalent to 16 in decimal)
+		followTree(byte, 8, currentNode); // Use our followTree method to go the correct direction based on the fourth to right-most bit (equivalent to 8 in decimal)
+		followTree(byte, 4, currentNode); // Use our followTree method to go the correct direction based on the third to right-most bit (equivalent to 4 in decimal)
+		followTree(byte, 2, currentNode); // Use our followTree method to go the correct direction based on the second to right-most bit (equivalent to 2 in decimal)
+		followTree(byte, 1, currentNode); // Use our followTree method to go the correct direction based on the right-most bit (equivalent to 1 in decimal)
 	}
 }
 
 void Huffman::followTree(unsigned char byte, int checkBit, node*& currentNode)
 {
+	// Helper method we use to follow our tree from our input to decode the file
+
+	// Adjust the currentNode, first use a bitwise AND on byte and the bit we want to check
+	// If it is true, that means we had a '1' in that spot of the byte, so go right
+	// otherwise, we must have had a '0' in that spot of the byte, so go left
 	currentNode = byte & checkBit ? currentNode->right : currentNode->left;
 	if (isLeaf(currentNode))
 	{
+		// If we've reached a leaf, then we want to output the symbol in our leaf to the file
 		outputStream.put(currentNode->symbol);
-		//cout << "printed " << currentNode->symbol << " to file" << endl;
-		bytesOut++;
-		currentNode = nodes[0];
+		bytesOut++; // We output a byte to the file, so increment the counter
+		currentNode = nodes[0]; // Reset our currentNode to be the top of the tree so we can continue on as normal
 	}
 }
 
 void Huffman::closeFiles()
 {
-	if (inputStream.is_open())
-		inputStream.close();
+	// Helper method to close out any files we have open
+	if (inputStream.is_open()) 
+		inputStream.close(); // If the inputStream is open, close it
 	if (outputStream.is_open())
-		outputStream.close();
+		outputStream.close(); // If the outputStream is open, close it
 	if (treeStream.is_open())
-		treeStream.close();
+		treeStream.close(); // If the treeSteam is open, close it
 }
 
 void Huffman::printActionDetail()
