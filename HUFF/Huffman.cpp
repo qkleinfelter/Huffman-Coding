@@ -124,18 +124,23 @@ void Huffman::EncodeFile(string inputFile, string outputFile)
 
 int Huffman::getSmallestNodeIndex(int indexToSkip)
 {
-	unsigned int smallestWeight = INT32_MAX;
-	int smallestIndex = -1;
+	// This is a helper function that loops through our nodes array
+	// to find the node that has the smallest weight and return its index.
+	// We include an index we want to skip so we can run this method twice and
+	// not get the same index both times
+	unsigned int smallestWeight = INT32_MAX; // Initialize a smallest weight to be the maximum number our unsigned int can hold
+	int smallestIndex = -1; // Set up a variable to hold our smallest index, which by default is -1
 	for (int i = 0; i < numChars; i++)
 	{
-		if (i == indexToSkip || nodes[i] == nullptr) continue;
-		if (nodes[i]->weight < smallestWeight)
+		// Loop through the array
+		if (i == indexToSkip || nodes[i] == nullptr) continue; // If we are at the index we want to skip, or the current node is null, continue on to the next iteration
+		if (nodes[i]->weight < smallestWeight) // If the weight of our current node is smaller than the smallest weight we have seen yet
 		{
-			smallestIndex = i;
-			smallestWeight = nodes[i]->weight;
+			smallestIndex = i; // Set the smallest index to our current index
+			smallestWeight = nodes[i]->weight; // Set the smallest weight to our current weight
 		}
 	}
-	return smallestIndex;
+	return smallestIndex; // Once we've looped through the whole thing, return the index of the smallest weight node
 
 }
 
@@ -168,44 +173,55 @@ void Huffman::buildEncodingStrings(node* startingPoint, string currentPath)
 
 void Huffman::DecodeFile(string inputFile, string outputFile)
 {
+	// This method Decodes an inputFile into our outputFile
+	// This implements the -d command line parameter
 	if (inputFile == outputFile)
 	{
+		// Our input can't be the same as our output, so display an error and exit
 		cout << "Input File can not be equal to Output File" << endl;
 		return;
 	}
-	openFiles(inputFile, outputFile, "");
-	buildTreeFromFile(inputStream);
-	decode();
-	closeFiles();
-	printActionDetail();
+	openFiles(inputFile, outputFile, ""); // Open up our input and output files, we don't need a tree stream here
+	buildTreeFromFile(inputStream); // Build a tree from our input file, since our input must contain tree builder info
+	decode(); // Decode the file based on the tree we built
+	closeFiles(); // Close out the files now that we're done
+	printActionDetail(); // Print info about the work we did
 }
 
 void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outputFile)
 {
+	// This method encodes an input file into an output file,
+	// using tree builder information from a third tree file
+	// This implements the -et command line parameter
 	if (inputFile == outputFile)
 	{
+		// Our input and output files can't be the same so display an error and exit
 		cout << "Input File can not be equal to Output File" << endl;
 		return;
 	}
 	if (outputFile == "")
 	{
+		// If our output file is empty, we want to decide it based on
+		// our input file, so first we look for a period
 		auto dotLoc = inputFile.find(".");
 		if (dotLoc == string::npos)
 		{
-			outputFile += ".huf";
+			// If we don't have a period in the input file simply append .huf to it for our output
+			outputFile = inputFile + ".huf";
 		}
 		else
 		{
+			// Otherwise, replace the extension with .huf
 			string fileNameWithoutExtension = inputFile.substr(0, dotLoc);
 			outputFile = fileNameWithoutExtension + ".huf";
 		}
 	}
-	openFiles(inputFile, outputFile, treeFile);
-	buildTreeFromFile(treeStream);
-	buildEncodingStrings(nodes[0], "");
-	encode();
-	closeFiles();
-	printActionDetail();
+	openFiles(inputFile, outputFile, treeFile); // Open up all three of our files as we need
+	buildTreeFromFile(treeStream); // Build our tree based on the information from our treeStream
+	buildEncodingStrings(nodes[0], ""); // Build our table of encoding strings from that tree
+	encode(); // Encode the file
+	closeFiles(); // Close our files since we are done
+	printActionDetail(); // Print info about what we did
 }
 
 void Huffman::DisplayHelp()
