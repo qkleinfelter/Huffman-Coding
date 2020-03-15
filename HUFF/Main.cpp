@@ -2,7 +2,10 @@
     Quinn Kleinfelter
     EECS 2510-001 Non Linear Data Structures Spring 2020
     Dr. Thomas
-    Last Edited: 3/13/20
+    Last Edited: 3/15/20
+
+    Main class to run through our Huffman work based on 
+    command line parameters passed to our exe
 */
 
 #include "Huffman.h"
