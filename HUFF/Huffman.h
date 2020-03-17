@@ -2,7 +2,7 @@
 	Quinn Kleinfelter
 	EECS 2520-001 Non Linear Data Structures Spring 2020
 	Dr. Thomas
-	Last Edited: 3/15/20
+	Last Edited: 3/17/20
 
 	Header file to contain the class definition for all of
 	our Huffman work.
@@ -44,6 +44,7 @@ private:
 	unsigned int bytesIn = 0; // Unsigned int to keep track of the amount of bytes we read in, so we can output this number eventually
 	unsigned int bytesOut = 0; // Unsigned int to keep track of the amount of bytes we print out, so we can output this number eventually
 	clock_t start = clock(); // The time we started running the program in clock ticks, so we can keep track of how long our program runs
+	//int powersOf2[8] = { 128, 64, 32, 16, 8, 4, 2, 1 }; // This array would have been used when decoding but it turns out the code benchmarks faster without it, see decode() for more info
 
 	bool openFiles(string inputFile, string outputFile, string treeFile); // Helper method to open up our files into the appropriate streams
 	void buildFrequencyTable(); // Helper method that builds the frequency table for the input file

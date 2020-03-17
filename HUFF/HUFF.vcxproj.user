@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>-et "C:\Users\Quinn\Desktop\Huffman Testing\Shakespeare.txt" "C:\Users\Quinn\Desktop\Huffman Testing\Hamlet-Scene-1.htree" "C:\Users\Quinn\Desktop\Huffman Testing\Shakespeare2.huf"</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-d "C:\Users\Quinn\Desktop\Huffman Testing\MRT.huf" "C:\Users\Quinn\Desktop\Huffman Testing\MRT DECODED.exe"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

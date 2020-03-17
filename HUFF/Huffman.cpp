@@ -9,7 +9,7 @@
 	Author: Quinn Kleinfelter
 	Class: EECS 2510-001 Non Linear Data Structures Spring 2020
 	Instructor: Dr. Thomas
-	Last Edited: 3/13/20
+	Last Edited: 3/17/20
 	Copyright: Copyright 2020 by Quinn Kleinfelter. All rights reserved.
 */
 
@@ -401,6 +401,12 @@ void Huffman::decode()
 		// Loop through all of the characters in the inputStream, placing them into character
 		bytesIn++; // Increment bytesIn for each one, since we read a byte in
 		unsigned char byte = character; // Coerce our character into an unsigned char which is the basis for our byte
+
+		// I chose to simply write out the method 8 times here instead of
+		// pre-calculating powers of 2 and looping through with either running
+		// the method in each step of the loop, or basically inlining the method
+		// in a loop, because it benchmarked faster on MRT.exe over an average
+		// of 4 decodes per method
 		followTree(byte, 128, currentNode); // Use our followTree method to go the correct direction based on the left-most bit (equivalent to 128 in decimal)
 		followTree(byte, 64, currentNode); // Use our followTree method to go the correct direction based on the second to left-most bit (equivalent to 64 in decimal)
 		followTree(byte, 32, currentNode); // Use our followTree method to go the correct direction based on the third to left-most bit (equivalent to 32 in decimal)
@@ -409,6 +415,27 @@ void Huffman::decode()
 		followTree(byte, 4, currentNode); // Use our followTree method to go the correct direction based on the third to right-most bit (equivalent to 4 in decimal)
 		followTree(byte, 2, currentNode); // Use our followTree method to go the correct direction based on the second to right-most bit (equivalent to 2 in decimal)
 		followTree(byte, 1, currentNode); // Use our followTree method to go the correct direction based on the right-most bit (equivalent to 1 in decimal)
+		
+		/*
+		for (int i = 0; i < 8; i++)
+		{
+			followTree(byte, powersOf2[i], currentNode);
+		}
+		Benchmarked on MRT.exe: avg over 4 runs was 15.90 seconds (about a second and a half slower than just writing the method 8 times)
+		*/
+		/*
+		for (int i = 0; i < 8; i++)
+		{
+			currentNode = byte & powersOf2[i] ? currentNode->right : currentNode->left;
+			if (isLeaf(currentNode))
+			{
+				outputStream.put(currentNode->symbol);
+				bytesOut++;
+				currentNode = nodes[0];
+			}
+		}
+		Benchmarked on MRT.exe: avg over 4 runs was 15.114 seconds (about .75 seconds slower than just writing the method 8 times)
+		*/
 	}
 }
 
