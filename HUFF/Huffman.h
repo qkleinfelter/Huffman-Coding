@@ -2,7 +2,7 @@
 	Quinn Kleinfelter
 	EECS 2520-001 Non Linear Data Structures Spring 2020
 	Dr. Thomas
-	Last Edited: 3/17/20
+	Last Edited: 4/20/20
 
 	Header file to contain the class definition for all of
 	our Huffman work.
