@@ -119,5 +119,10 @@ int main(int argc, char* argv[])
             exit(0);
         }
     }
+    else
+    {
+        cout << "Invalid command: flag not recognized" << endl;
+        exit(0);
+    }
     delete huffman; // Delete our object once we're done
 }
