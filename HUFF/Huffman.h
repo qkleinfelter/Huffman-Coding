@@ -50,7 +50,7 @@ private:
 	void buildFrequencyTable(); // Helper method that builds the frequency table for the input file
 	int getSmallestNodeIndex(int indexToSkip); // Helper method that gets the smallest node index from our nodes array, skipping the input parameter so we don't output the same index twice
 	void buildTree(); // Helper method that combines items in the nodes[] array to build our tree
-	void buildTreeFromFile(ifstream& file); // Helper method that builds a tree from the parameter file (either inputStream, or treeStream)
+	void buildTreeFromFile(ifstream& file, bool writeTree); // Helper method that builds a tree from the parameter file (either inputStream, or treeStream)
 	void buildEncodingStrings(node* startingPoint, string currentPath); // Helper method to build all encoding strings starting at a given node with a given path
 	void encode(); // Helper method that encodes a file
 	void decode(); // Helper method that decodes a file

@@ -182,7 +182,7 @@ void Huffman::DecodeFile(string inputFile, string outputFile)
 		return;
 	}
 	if (!openFiles(inputFile, outputFile, "")) return;  // Open up our input and output files, we don't need a tree stream here, return and exit if any fail
-	buildTreeFromFile(inputStream); // Build a tree from our input file, since our input must contain tree builder info
+	buildTreeFromFile(inputStream, false); // Build a tree from our input file, since our input must contain tree builder info
 	decode(); // Decode the file based on the tree we built
 	closeFiles(); // Close out the files now that we're done
 	printActionDetail(); // Print info about the work we did
@@ -217,7 +217,7 @@ void Huffman::EncodeFileWithTree(string inputFile, string treeFile, string outpu
 		}
 	}
 	if (!openFiles(inputFile, outputFile, treeFile)) return;  // Open up all three of our files as we need, return and exit if any fail
-	buildTreeFromFile(treeStream); // Build our tree based on the information from our treeStream
+	buildTreeFromFile(treeStream, true); // Build our tree based on the information from our treeStream
 	buildEncodingStrings(nodes[0], ""); // Build our table of encoding strings from that tree
 	encode(); // Encode the file
 	closeFiles(); // Close our files since we are done
@@ -357,7 +357,7 @@ void Huffman::encode()
 	}
 }
 
-void Huffman::buildTreeFromFile(ifstream& file)
+void Huffman::buildTreeFromFile(ifstream& file, bool writeTree)
 {
 	// This method builds a tree based on the information from a file,
 	// which we can choose by passing in the correct ifstream
@@ -386,6 +386,12 @@ void Huffman::buildTreeFromFile(ifstream& file)
 		parent->symbol = NULL; // Symbol is NULL since we aren't at a leaf
 		parent->left = nodes[char1]; // The left child will always be whatever was our first of the 2 chars read in
 		parent->right = nodes[char2]; // The right child will always be whatever was our second of the 2 chars read in
+		if (writeTree)
+		{
+			outputStream.put(char1);
+			outputStream.put(char2);
+		}
+		bytesOut += 2;
 		nodes[char2] = nullptr; // Set the location where char2 was in the nodes array to null
 		nodes[char1] = parent; // Set the location where char1 was in the nodes array to the new parent node
 	}
